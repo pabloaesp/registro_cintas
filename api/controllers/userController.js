@@ -1,6 +1,8 @@
 'use strict'
 
 var bcrypt = require('bcrypt-nodejs');
+var jwt = require('../services/jwt');
+
 var User = require('../models/userModel');
 
 // var jwt = require('../services/jwt');
@@ -73,10 +75,16 @@ function loginUser(req, res){
 
         if (user){
             bcrypt.compare(password, user.password, (err, check) => {
-
                 if (check) {
-                    user.password = undefined;
-                    return res.status(200).send({user});
+                    if(params.gettoken){
+                        // Generar token y devolver
+                        return res.status(200).send({token: jwt.createToken(user)});
+
+                    }else{
+                        // Devolver datos del usuario
+                        user.password = undefined;
+                        return res.status(200).send({user});
+                    }
 
                 }else{
                     return res.status(404).send({message: 'Usuario o Contraseña incorrectos.'});
