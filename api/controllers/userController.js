@@ -31,7 +31,7 @@ function registerUser(req, res){
 
             // Compruebo que el nick/ID del usuario exista.
             if(users && users.length >= 1){
-                return res.status(200).send({message: 'El usuario que intenta registrar, ya existe'});
+                return res.status(200).send({message: 'El usuario que intenta registrar ya existe.'});
             
             }else{
 
@@ -62,8 +62,36 @@ function registerUser(req, res){
     }
 }
 
+function loginUser(req, res){
+    var params = req.body;
+
+    var nick = params.nick;
+    var password = params.password;
+
+    User.findOne({nick: nick}, (err, user) => {
+        if(err) return res.status(500).send({message: 'Error en la peticion'});
+
+        if (user){
+            bcrypt.compare(password, user.password, (err, check) => {
+
+                if (check) {
+                    user.password = undefined;
+                    return res.status(200).send({user});
+
+                }else{
+                    return res.status(404).send({message: 'Usuario o Contraseña incorrectos.'});
+                }
+            });
+
+        }else{
+            return res.status(404).send({message: 'Usuario o Contraseña incorrectos!'});
+        }
+    });
+}
+
 
 module.exports = {
     home,
-    registerUser
+    registerUser,
+    loginUser
 }
