@@ -6,7 +6,8 @@ var Schema = mongoose.Schema;
 var TapeSchema = Schema({
     number: String,
     description: String,
-    place: String
+    place: String,
+    status: String
 });
 
 module.exports = mongoose.model('Tape', TapeSchema);

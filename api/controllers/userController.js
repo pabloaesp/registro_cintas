@@ -5,12 +5,9 @@ var jwt = require('../services/jwt');
 
 var User = require('../models/userModel');
 
-// var jwt = require('../services/jwt');
-
 function home(req, res) {
     res.status(200).send({message: 'Respondiendo desde Home'});
 }
-
 
 function registerUser(req, res){
     var params = req.body;

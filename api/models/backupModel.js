@@ -8,6 +8,7 @@ var BackupSchema = Schema({
     description: String,
     type: String,
     user: { type: Schema.ObjectId, ref: 'User' },
+    tape: { type: Schema.ObjectId, ref: 'Tape' },
     periodicity: String,
     date: String,
     server: String,

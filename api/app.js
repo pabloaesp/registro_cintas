@@ -8,6 +8,7 @@ var app = express();
 
 //cargar rutas
 var user_routes = require('./routes/userRoutes');
+var tape_routes = require('./routes/tapeRoutes');
 
 
 //middlewares
@@ -29,6 +30,7 @@ app.use((req, res, next) => {
 
 //rutas
 app.use('/api', user_routes);
+app.use('/api', tape_routes);
 
 
 //exports
