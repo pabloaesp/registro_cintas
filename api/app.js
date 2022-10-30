@@ -3,7 +3,7 @@
 const express = require('express');
 var bodyParser = require('body-parser');
 1
-var app = express();Prueba
+var app = express();
 
 
 //cargar rutas
