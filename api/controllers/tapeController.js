@@ -64,7 +64,7 @@ function tapeUpdate(req, res){
     Tape.findByIdAndUpdate(tapeId, update, {new:true}, (err, tapeUpdated) => {
         if(err) res.status(500).send({message: 'Error en la peticion'});
 
-        if(!tapeUpdated) return res.status(404).send({message: 'No se ha podido actualizar la cinta'});
+        if(!tapeUpdated) return res.status(404).send({message: 'No se ha podido actualizar la cinta.'});
 
         return res.status(200).send({tape: tapeUpdated});
 
@@ -80,7 +80,7 @@ function tapeStatusUpdate(req, res){
     Tape.findByIdAndUpdate(tapeId, {status:status}, {new:true}, (err, tapeStatusUpdated) => {
         if(err) res.status(500).send({message: 'Error en la peticion'});
         
-        if(!tapeStatusUpdated) return res.status(404).send({message: 'No se ha podido actualizar el status de la cinta'});
+        if(!tapeStatusUpdated) return res.status(404).send({message: 'No se ha podido actualizar el status de la cinta.'});
         
         return res.status(200).send({tape: tapeStatusUpdated});
 
@@ -88,9 +88,30 @@ function tapeStatusUpdate(req, res){
 }
 
 
+function deleteTape(req, res){
+    var tapeId = req.params.id;
+
+    Tape.findOne({'_id': tapeId}, (err, tape) => {
+        if(err) return res.status(500).send({message: 'Error en la peticion'});
+        
+        if(tape == null) return res.status(404).send({message: 'La cinta no existe.'});
+
+        if(tape){
+            Tape.deleteOne({'_id': tapeId}, (err, tapeRemoved) => {
+                if(err) return res.status(500).send({message: 'Error al borrar la cinta'});
+        
+                if (tapeRemoved) return res.status(200).send({message: 'Cinta eliminada correctamente.'});        
+            });
+        }
+    });
+    
+}
+
+
 module.exports = {
     tapeRegister,
     getTape,
     tapeUpdate,
-    tapeStatusUpdate
+    tapeStatusUpdate,
+    deleteTape
 }
