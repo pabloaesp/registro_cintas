@@ -9,6 +9,7 @@ var app = express();
 //cargar rutas
 var user_routes = require('./routes/userRoutes');
 var tape_routes = require('./routes/tapeRoutes');
+var backup_routes = require('./routes/backupRegisterRoutes');
 
 
 //middlewares
@@ -31,6 +32,7 @@ app.use((req, res, next) => {
 //rutas
 app.use('/api', user_routes);
 app.use('/api', tape_routes);
+app.use('/api', backup_routes);
 
 
 //exports
