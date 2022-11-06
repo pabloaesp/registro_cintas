@@ -56,6 +56,45 @@ function saveBackupRegister(req, res){
 }
 
 
+
+function updateRegisterBackup(req, res){
+    var registerId = req.params.id;
+
+    var update = req.body;
+
+    // Borro los dos valores criticos porque uno no se edita y el otro se maneja en otra funcion
+    delete update.number;
+    delete update.status;
+    
+    Tape.findByIdAndUpdate(tapeId, update, {new:true}, (err, tapeUpdated) => {
+        if(err) res.status(500).send({message: 'Error en la peticion'});
+
+        if(!tapeUpdated) return res.status(404).send({message: 'No se ha podido actualizar la cinta.'});
+
+        return res.status(200).send({tape: tapeUpdated});
+
+    });
+}
+
+
+
+function tapeStatusUpdate(req, res){
+    var tapeId = req.params.id;
+
+    var status = req.body.status;
+    
+    Tape.findByIdAndUpdate(tapeId, {status:status}, {new:true}, (err, tapeStatusUpdated) => {
+        if(err) res.status(500).send({message: 'Error en la peticion'});
+        
+        if(!tapeStatusUpdated) return res.status(404).send({message: 'No se ha podido actualizar el status de la cinta.'});
+        
+        return res.status(200).send({tape: tapeStatusUpdated});
+
+    });
+}
+
+
+
 function deleteBackupRegister(req, res){
     var registerId = req.params.id;
 
@@ -87,5 +126,6 @@ function deleteBackupRegister(req, res){
 
 module.exports = {
     saveBackupRegister,
-    deleteBackupRegister
+    deleteBackupRegister,
+    updateRegisterBackup
 }
