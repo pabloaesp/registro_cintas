@@ -59,23 +59,33 @@ function saveBackupRegister(req, res){
 function deleteBackupRegister(req, res){
     var registerId = req.params.id;
 
-    Tape.findOne({'_id': registerId}, (err, register) => {
+    BackupRegister.findOne({'_id': registerId}, (err, register) => {
         if(err) return res.status(500).send({message: 'Error en la peticion'});
-        
-        if(register == null) return res.status(404).send({message: 'El respaldo no existe.'});
 
-        if(tape){
-            Tape.deleteOne({'_id': tapeId}, (err, tapeRemoved) => {
-                if(err) return res.status(500).send({message: 'Error al borrar la cinta'});
-        
-                if (tapeRemoved) return res.status(200).send({message: 'Cinta eliminada correctamente.'});        
-            });
+        if(register == null){
+            return res.status(404).send({message: 'El respaldo no existe.'});
+
+        }else{
+            // Validacion de que no se pueda borrar un registro de un respaldo que ya termino
+            var endDate = new Date(register.end_date*1000);
+            var diff = moment().diff(endDate, 'hours');
+    
+            if(diff >= 0){
+                return res.status(500).send({message: 'No se puede eliminar un respaldo ya finalizado.'});
+    
+            }else{
+                BackupRegister.deleteOne({'_id': registerId}, (err, registerRemoved) => {
+                    if(err) return res.status(500).send({message: 'Error al borrar la cinta'});
+            
+                    if (registerRemoved) return res.status(200).send({message: 'Registro de respaldo eliminado correctamente.'});        
+                });
+                }
         }
     });
-    
 }
 
 
 module.exports = {
-    saveBackupRegister
+    saveBackupRegister,
+    deleteBackupRegister
 }
