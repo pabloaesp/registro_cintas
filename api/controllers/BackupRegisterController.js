@@ -9,8 +9,8 @@ var Tape = require('../models/tapeModel');
 
 function saveBackupRegister(req, res){
 
-    // Backup se refiere al tipo de backup: Lunes full, Sabado VMs, Jueves Correo  sus detalles
-    // BackupRegister se refiere al registro del backyp que contiene backup, user, tape...
+    // BACKUP se refiere al tipo de backup: Lunes full, Sabado VMs, Jueves Correo  sus detalles
+    // REGISTERBACKUP se refiere al registro del backup que contiene backup, user, tape...
     
     var params = req.body;
     
@@ -20,7 +20,7 @@ function saveBackupRegister(req, res){
     backupData.backup = params.backup;
     backupData.tape = params.tape;
     backupData.note = params.note;
-    backupData.start_date = moment().unix(); //COLOCAR UNIX A TODAS LAS FECHAS
+    backupData.start_date = moment().unix();
     // END.DATE* Se gestiona abajo
     backupData.status = true
 
@@ -40,12 +40,15 @@ function saveBackupRegister(req, res){
                     // Seteando END_DATE*
                     backupData.end_date = moment().add(hours, 'hours').unix();
                     // var date = new Date(backup.end_date*1000);
+
+                    // Actualizo el status de la cinta que se va a usar
+                    updateStatus(backupData.tape, true);
                 
                     // SALVO la data validada del registro del backup
                     backupData.save((err, backupDataSaved) => {
                         if(err) return res.status(500).send({message: 'Error al guardar el registro'});
                 
-                        if(!backupDataSaved) return res.status(404).send({message: 'No se ha guardado el registro'});
+                        if(!backupDataSaved) return res.status(404).send({message: 'No se ha guardado el registro.'});
                 
                         return res.status(200).send({backup: backupDataSaved});
                     });
@@ -59,37 +62,63 @@ function saveBackupRegister(req, res){
 
 function updateRegisterBackup(req, res){
     var registerId = req.params.id;
+    var params = req.body;
 
-    var update = req.body;
+    params.start_date = moment().unix();
 
-    // Borro los dos valores criticos porque uno no se edita y el otro se maneja en otra funcion
-    delete update.number;
-    delete update.status;
+    // Borro el status porque se gestiona en una funcion aparte
+    delete params.status;
+
+    // Validando que el respaldo no haya finalizado
+    BackupRegister.findById({_id: registerId}).populate('tape backup').exec((err, backupRegister) => {
+        if(err) return res.status(500).send({message: 'Error en la peticion'});
+       
+        // Actualizo END_DATE* segun tipo de backup. 
+        // Se hace aca porque al popular el backup ya tengo los datos del mismo y puedo conseguir el process_time
+        var hours = backupRegister.backup.process_time; 
+        // Seteando END_DATE*
+        params.end_date = moment().add(hours, 'hours').unix();
+
+        // Validando que el respaldo no este finalizado
+        if(backupRegister.status != true) return res.status(500).send({message: 'No se puede modificar un respaldo finalizado.'});
+        
+        // Validando que la nueva cinta, no este en uso
+        Tape.findById({_id: params.tape}, (err, tape) => {
+            if(err) return res.status(500).send({message: 'Error en la peticion'});
+
+            var tapeStatus = tape.status;
+            var oldTapeStatus = backupRegister.tape;
+            if (tapeStatus == true && tapeStatus != oldTapeStatus){
+                return res.status(500).send({message: 'No se puede elegir una cinta en uso.'});
+            }
+
+            // Actualizo el status de la cinta que ya no se va a usar
+            updateStatus(oldTapeStatus, false);
+        });
+
+        // Actualizo el registro
+        BackupRegister.findByIdAndUpdate(registerId, params, {new:true}, (err, registerUpdated) => {
+            if(err) res.status(500).send({message: 'Error en la peticion'});
     
-    Tape.findByIdAndUpdate(tapeId, update, {new:true}, (err, tapeUpdated) => {
-        if(err) res.status(500).send({message: 'Error en la peticion'});
+            if(!registerUpdated) return res.status(404).send({message: 'No se ha podido actualizar el registro.'});
+    
+            // Actualizo el status de la nueva cinta
+            updateStatus(params.tape, true);
 
-        if(!tapeUpdated) return res.status(404).send({message: 'No se ha podido actualizar la cinta.'});
-
-        return res.status(200).send({tape: tapeUpdated});
-
+            return res.status(200).send({register: registerUpdated});
+    
+        });
     });
-}
+}      
 
 
-
-function tapeStatusUpdate(req, res){
-    var tapeId = req.params.id;
-
-    var status = req.body.status;
-    
-    Tape.findByIdAndUpdate(tapeId, {status:status}, {new:true}, (err, tapeStatusUpdated) => {
-        if(err) res.status(500).send({message: 'Error en la peticion'});
+// Actualiza el status de las cintas
+async function updateStatus(tapeId, status){
+   await Tape.findByIdAndUpdate(tapeId, status, {new:true}).exec().then((statusUpdated) => {
+        return res.status(200).send({tape: statusUpdated});
         
-        if(!tapeStatusUpdated) return res.status(404).send({message: 'No se ha podido actualizar el status de la cinta.'});
-        
-        return res.status(200).send({tape: tapeStatusUpdated});
-
+    }).catch((err) => {
+        return handleError(err);
     });
 }
 
@@ -126,6 +155,7 @@ function deleteBackupRegister(req, res){
 
 module.exports = {
     saveBackupRegister,
-    deleteBackupRegister,
-    updateRegisterBackup
+    updateRegisterBackup,
+    updateStatus,
+    deleteBackupRegister
 }
