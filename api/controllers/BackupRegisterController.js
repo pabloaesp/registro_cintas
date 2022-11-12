@@ -7,19 +7,18 @@ var BackupRegister = require('../models/backupRegisterModel');
 var User = require('../models/userModel');
 var Tape = require('../models/tapeModel');
 
-function saveBackupRegister(req, res){
+// BACKUP se refiere al tipo de backup: Lunes full, Sabado VMs, Jueves Correo  sus detalles
+// REGISTERBACKUP se refiere al registro del backup que contiene backup, user, tape...
 
-    // BACKUP se refiere al tipo de backup: Lunes full, Sabado VMs, Jueves Correo  sus detalles
-    // REGISTERBACKUP se refiere al registro del backup que contiene backup, user, tape...
-    
-    var params = req.body;
+function saveBackupRegister(req, res){
+    var body = req.body;
     
     var backupData = new BackupRegister();
     
     backupData.user = req.user.sub;
-    backupData.backup = params.backup;
-    backupData.tape = params.tape;
-    backupData.note = params.note;
+    backupData.backup = body.backup;
+    backupData.tape = body.tape;
+    backupData.note = body.note;
     backupData.start_date = moment().unix();
     // END.DATE* Se gestiona abajo
     backupData.status = true
@@ -43,15 +42,15 @@ function saveBackupRegister(req, res){
 
                     // Actualizo el status de la cinta que se va a usar
                     updateStatus(backupData.tape, true);
+                    
+                    // // SALVO la data validada del registro del backup
+                    // backupData.save((err, backupDataSaved) => {
+                    //     if(err) return res.status(500).send({message: 'Error al guardar el registro'});
                 
-                    // SALVO la data validada del registro del backup
-                    backupData.save((err, backupDataSaved) => {
-                        if(err) return res.status(500).send({message: 'Error al guardar el registro'});
+                    //     if(!backupDataSaved) return res.status(404).send({message: 'No se ha guardado el registro.'});
                 
-                        if(!backupDataSaved) return res.status(404).send({message: 'No se ha guardado el registro.'});
-                
-                        return res.status(200).send({backup: backupDataSaved});
-                    });
+                    //     return res.status(200).send({backup: backupDataSaved});
+                    // });
                 }
             });
         }
@@ -93,7 +92,7 @@ function updateRegisterBackup(req, res){
             }
 
             // Actualizo el status de la cinta que ya no se va a usar
-            updateStatus(oldTapeStatus, false);
+            // updateStatus(oldTapeStatus, false);
         });
 
         // Actualizo el registro
@@ -103,7 +102,7 @@ function updateRegisterBackup(req, res){
             if(!registerUpdated) return res.status(404).send({message: 'No se ha podido actualizar el registro.'});
     
             // Actualizo el status de la nueva cinta
-            updateStatus(params.tape, true);
+            // updateStatus(params.tape, true);
 
             return res.status(200).send({register: registerUpdated});
     
@@ -114,12 +113,38 @@ function updateRegisterBackup(req, res){
 
 // Actualiza el status de las cintas
 async function updateStatus(tapeId, status){
-   await Tape.findByIdAndUpdate(tapeId, status, {new:true}).exec().then((statusUpdated) => {
-        return res.status(200).send({tape: statusUpdated});
-        
+
+// PRIMERO APRENDER COMO HACER PRIMERO UN FIND, GUARDARLO EN VARIABLES Y LUEGO CON ESAS VARIABLES UN UPDATE
+// Y COLOCARLO EN LA FUNCION DEL SAVE PARA APARTARLO DEL ASYNC
+// LUEGO DE QUE FUNCIONE VER COMO METERLO EN EL ASYNC AWAIT
+
+   var response = await Tape.findOne({_id: tapeId}, {"status": 1}).exec().then((statusUpdated) => {
+        if (statusUpdated.status == false) {
+
+            Tape.updateOne(tapeId, {status: status}, (status) => {
+                return status;
+            });
+
+        }
     }).catch((err) => {
         return handleError(err);
-    });
+   });
+
+   console.log(response);
+
+//    var result = await Tape.findByIdAndUpdate(tapeId, {status: status}, {new:true}).exec().then((statusUpdated) => {
+
+//         if (statusUpdated == true) return res.status(500).send({message: 'La cinta elegida ya esta en uso.'});
+
+//         return statusUpdated;
+
+//     }).catch((err) => {
+//         return handleError(err);
+//     });
+
+    return {
+        tape: response
+    }
 }
 
 
