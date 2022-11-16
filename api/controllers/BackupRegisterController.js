@@ -8,7 +8,7 @@ var User = require('../models/userModel');
 var Tape = require('../models/tapeModel');
 
 // BACKUP se refiere al tipo de backup: Lunes full, Sabado VMs, Jueves Correo  sus detalles
-// REGISTERBACKUP se refiere al registro del backup que contiene backup, user, tape...
+// REGISTERBACKUP se refiere al registro del backup que contiene backup, user, register...
 
 function saveBackupRegister(req, res){
     var body = req.body;
@@ -24,17 +24,17 @@ function saveBackupRegister(req, res){
     backupData.status = true
 
     BackupRegister.findOne({status: true}, (err, backup) => {
-        if(err) return res.status(500).send({message: 'Error en la peticion'});
+        if(err) return res.status(500).send({message: 'Error en la peticion 1'});
 
         if (backup) {
-            return res.status(500).send({message: 'Hay un respaldo en proceso!'})
+            return res.status(500).send({message: 'Ya hay un respaldo en proceso!'})
 
         }else{
             // VALIDACIONES
 
             // TIPO BACKUP: Busco el tipo de BACKUP y asigno el END_DATE*
             Backup.findById({"_id": req.body.backup}, (err, data) => {
-                if (err) return res.status(500).send({message: 'Error en la peticion'});
+                if (err) return res.status(500).send({message: 'Error en la peticion 2'});
 
                 if (!data) return res.status(404).send({message: 'El campo Cinta, es obligatorio'});
 
@@ -46,7 +46,8 @@ function saveBackupRegister(req, res){
                 
                     // TAPE: Comprobando que la TAPE a utilizar no este en uso
                     Tape.findById({_id: backupData.tape}, (err, tapeUsed) => {
-                        if (err) return res.status(500).send({message: 'Error en la peticion'});
+                        console.log(tapeUsed);
+                        if (err) return res.status(500).send({message: 'Error en la peticion 3'});
 
                         if (tapeUsed.status == true) {
                             return res.status(500).send({message: 'La cinta seleccionada ya esta en uso.'});
@@ -145,31 +146,36 @@ async function updateStatus(tapeId, status){
 }
 
 
-
+// VALIDAR QUE EL RESPALDO ESTE FINALIZADO PERO POR EL STATUS
+// CAMBIAR EL ESTADO DE LA CINTA AL ELIMINAR
+// HACER FUNCIONES GET DE REGISTRO, BACKUP Y CINTAS
 function deleteBackupRegister(req, res){
     var registerId = req.params.id;
 
-    BackupRegister.findOne({'_id': registerId}, (err, register) => {
+    BackupRegister.findById({_id: registerId}).exec((err, register) => {
         if(err) return res.status(500).send({message: 'Error en la peticion'});
 
         if(register == null){
             return res.status(404).send({message: 'El respaldo no existe.'});
 
+        }else if (register.status == false){
+            return res.status(404).send({message: 'No se puede eliminar un respaldo finalizado.'});
+
         }else{
-            // Validacion de que no se pueda borrar un registro de un respaldo que ya termino
-            var endDate = new Date(register.end_date*1000);
-            var diff = moment().diff(endDate, 'hours');
-    
-            if(diff >= 0){
-                return res.status(500).send({message: 'No se puede eliminar un respaldo ya finalizado.'});
-    
-            }else{
-                BackupRegister.deleteOne({'_id': registerId}, (err, registerRemoved) => {
-                    if(err) return res.status(500).send({message: 'Error al borrar la cinta'});
+            // Validacion del respaldo finalizado por fecha
+            // var endDate = new Date(register.end_date*1000);
+            // var diff = moment().diff(endDate, 'hours');
+            // if(diff >= 0){
+            //     return res.status(500).send({message: 'No se puede eliminar un respaldo ya finalizado.'});
+
+            BackupRegister.deleteOne({'_id': registerId}, (err, registerRemoved) => {
+                if(err) return res.status(500).send({message: 'Error al borrar la cinta'});
+        
+                if (registerRemoved) return res.status(200).send({message: 'Registro de respaldo eliminado correctamente.'});        
+            });
             
-                    if (registerRemoved) return res.status(200).send({message: 'Registro de respaldo eliminado correctamente.'});        
-                });
-                }
+            updateStatus(register.tape, false);
+
         }
     });
 }
