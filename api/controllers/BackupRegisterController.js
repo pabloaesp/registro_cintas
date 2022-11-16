@@ -73,6 +73,28 @@ function saveBackupRegister(req, res){
 }
 
 
+function getBackupRegisters(req, res){
+
+    var itemsPerPage = 3;
+    var page = 1;
+
+    if(req.params.page){
+        page = req.params.page;
+    }
+
+    BackupRegister.find().sort('start_date').paginate(page, itemsPerPage, (err, registers, total) => {
+        if(err) res.status(500).send({message: 'Error en la peticion'});
+
+        if(!registers) return res.status(404).send({message: 'No registros disponibles'});
+
+        return res.status(200).send({
+            registers,
+            total,
+            pages: Math.ceil(total/itemsPerPage)
+        });
+    });
+}
+
 
 function updateRegisterBackup(req, res){
     var registerId = req.params.id;
@@ -146,8 +168,6 @@ async function updateStatus(tapeId, status){
 }
 
 
-// VALIDAR QUE EL RESPALDO ESTE FINALIZADO PERO POR EL STATUS
-// CAMBIAR EL ESTADO DE LA CINTA AL ELIMINAR
 // HACER FUNCIONES GET DE REGISTRO, BACKUP Y CINTAS
 function deleteBackupRegister(req, res){
     var registerId = req.params.id;
@@ -183,6 +203,7 @@ function deleteBackupRegister(req, res){
 
 module.exports = {
     saveBackupRegister,
+    getBackupRegisters,
     updateRegisterBackup,
     updateStatus,
     deleteBackupRegister
