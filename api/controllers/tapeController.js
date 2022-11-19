@@ -38,6 +38,29 @@ function tapeRegister(req, res){
 }
 
 
+function getTapes(req, res){
+
+    var itemsPerPage = 3;
+    var page = 1;
+
+    if(req.params.page){
+        page = req.params.page;
+    }
+
+    Tape.find().sort('status').paginate(page, itemsPerPage, (err, tapes, total) => {
+        if(err) res.status(500).send({message: 'Error en la peticion'});
+
+        if(!tapes) return res.status(404).send({message: 'No hay cintas disponibles'});
+
+        return res.status(200).send({
+            tapes,
+            total,
+            pages: Math.ceil(total/itemsPerPage)
+        });
+    });
+}
+
+
 function getTape(req, res){
     var tapeId = req.params.id;
 
@@ -110,6 +133,7 @@ function deleteTape(req, res){
 
 module.exports = {
     tapeRegister,
+    getTapes,
     getTape,
     tapeUpdate,
     tapeStatusUpdate,
