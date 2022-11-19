@@ -167,7 +167,6 @@ async function updateStatus(tapeId, status){
     }
 }
 
-// HACER FUNCIONES GET DE BACKUP Y CINTAS*******************************************
 
 function deleteBackupRegister(req, res){
     var registerId = req.params.id;
