@@ -1,1 +1,66 @@
-<p>Hola desde Login</p>
+<!-- DIV Padre que abarca w-100 y h-100 -->
+<div class="d-flex justify-content-center">
+
+    <div id="alert" class="alert alert-danger m-0" *ngIf="status == 'error'">
+        <p class="m-0">Usuario y/o contraseña incorrectos.</p>
+    </div>
+
+    <div id="div-login" class="d-flex  pt-4 my-5 col-4 rounded-3">
+        <form #loginForm="ngForm" (ngSubmit)="onSubmit()" class="d-flex flex-column w-100 align-items-center">
+
+        <div class="mb-4 col-9 justify-content-center">
+            <label for="label_user" class="form-label">Usuario</label>
+            <input type="text" name="nick" #nick="ngModel" [(ngModel)]="user.nick" class="form-control" id="label_user" required>
+            <span *ngIf="!nick.valid && nick.touched">
+                El usuario no es valido.
+            </span>
+        </div>   
+
+        <div class="mb-5 col-9 justify-content-center">
+            <label for="label_pass" class="form-label">Contraseña</label>
+            <input type="password" name="password" #password="ngModel" [(ngModel)]="user.password" class="form-control" id="label_pass" required>
+            <span *ngIf="!password.valid && password.touched">
+                La contraseña es obligatoria.
+            </span>
+        </div>
+
+        <input type="submit" value="Entrar" class="col-5 btn btn-success" [disabled]="!loginForm.form.valid">
+
+        </form>
+    </div>
+    
+</div>
+
+
+
+<!-- <div id="div-login" class="d-flex col-5 border border-primary">
+    <form #loginForm="ngForm" (ngSubmit)="onSubmit()" class=" d-flex w-100">
+
+        <div class="alert alert-success" *ngIf="status == 'success'">
+            Bienvenido!
+        </div>
+
+        <div class="alert alert-danger" *ngIf="status == 'error'">
+            Usuario y/o contraseña incorrectos.
+        </div>
+
+        <div class="row">
+            <label for="label_user" class="form-label">Usuario</label>
+            <input type="text" name="nick" #nick="ngModel" [(ngModel)]="user.nick" class="form-control" id="label_user" required>
+            <span *ngIf="!nick.valid && nick.touched">
+                El usuario no es valido.
+            </span>
+        </div>
+
+        <div class="row">
+            <label for="label_pass" class="form-label">Contraseña</label>
+            <input type="password" name="password" #password="ngModel" [(ngModel)]="user.password" class="form-control" id="label_pass" equired>
+            <span *ngIf="!password.valid && password.touched">
+                La contraseña es obligatoria.
+            </span>
+        </div>
+
+        <input type="submit" value="Login" class="btn btn-success" [disabled]="!loginForm.form.valid">
+
+    </form>
+</div> -->

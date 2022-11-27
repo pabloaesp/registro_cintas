@@ -23,12 +23,12 @@ export class AppComponent  {
   }
 
   ngOnInit(){
-    // this.identity = JSON.parse(this._userService.getIdentity());
-    // console.log(this.identity);
+    this.identity = JSON.parse(this._userService.getIdentity());
+    console.log(this.identity);
   }
 
   ngDoCheck(){
-    // this.identity = JSON.parse(this._userService.getIdentity());
+    this.identity = JSON.parse(this._userService.getIdentity());
   }
 
   logout(){
