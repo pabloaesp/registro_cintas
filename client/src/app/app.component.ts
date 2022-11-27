@@ -24,7 +24,7 @@ export class AppComponent  {
 
   ngOnInit(){
     this.identity = JSON.parse(this._userService.getIdentity());
-    console.log(this.identity);
+    // console.log(this.identity);
   }
 
   ngDoCheck(){
