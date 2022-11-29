@@ -34,7 +34,7 @@ export class AppComponent  {
   logout(){
     localStorage.clear();
     this.identity = null;
-    this._router.navigate(['/']);
+    this._router.navigate(['/login']);
   }
 
 }

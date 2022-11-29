@@ -1,5 +1,6 @@
 <!-- Se muestra cuando el usuario esta logueado -->
 <div id="nav-bar" class="d-flex flex-row" *ngIf="identity">
+    
     <div id="titulo" class="d-flex col-3">
         <div class="d-flex w-100 h-100 ps-3 justify-content-start align-items-center">
             <a class="link-home" [routerLink]="['/home']">
@@ -25,12 +26,6 @@
         </ul>
     </div>
 
-    <!-- <div class="d-flex col-3">
-        <div class="d-flex w-100 h-100 pe-4 justify-content-end align-items-center">
-            {{identity.name}}
-        </div>
-    </div> -->
-    
 </div>
 
 
