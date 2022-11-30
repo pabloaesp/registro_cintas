@@ -23,6 +23,26 @@ export class HomeService{
         this.token = this._userService.gettoken();
     }
 
+    gettoken(){
+        let token = localStorage.getItem('token');
+
+        if(token != "undefined"){
+            this.token = token;
+        }else{
+            this.token = null;
+        }
+
+        return this.token;
+    }
+
+    getRegister(): Observable<any>{
+        let headers = new HttpHeaders().set('Content-Type', 'application/json')
+                                        .set('Authorization', this.gettoken());
+
+        return this._http.get(this.url + 'get-register', {headers: headers});
+
+    }
+
     
 
 }

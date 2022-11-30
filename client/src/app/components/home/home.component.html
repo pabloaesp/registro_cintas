@@ -5,15 +5,39 @@
         <div class="d-flex flex-row mb-2">
             <h3>Registro de Respaldos</h3>
         </div>
+<!-- 
+        <div id="backup_reg" class="d-flex flex-row rounded border border-success" *ngFor="let register of registers">
+            <div class="d-flex col-2 border border-secondary rounded-start justify-content-center align-items-center">{{ (register.start_date | amFromUnix) | amLocale: 'es' | amDateFormat: 'DD-MM-YYYY' }}</div>
+            <div class="d-flex col-2 border border-secondary justify-content-center align-items-center">{{ register.backup.name }}</div>
+            <div class="d-flex col-2 border border-secondary justify-content-center align-items-center">{{ register.tape.number }}</div>
+            <div class="d-flex col-2 border border-secondary justify-content-center align-items-center">{{ register.user.name }}</div>
+            <div class="d-flex col-2 border border-secondary justify-content-center align-items-center">{{ (register.end_date | amFromUnix) | amLocale: 'es' | amDateFormat: 'DD-MM-YYYY' }}</div>
+            <div class="d-flex col-2 border border-secondary rounded-end justify-content-center align-items-center bg-success">{{ register.status }}</div>
+        </div> -->
 
-        <div id="backup_reg" class="d-flex flex-row rounded border border-success">
-            <div class="d-flex col-2 border border-secondary rounded-start justify-content-center align-items-center">22/10/2022</div>
-            <div class="d-flex col-2 border border-secondary justify-content-center align-items-center">Full Lunes</div>
-            <div class="d-flex col-2 border border-secondary justify-content-center align-items-center">LTO61290</div>
-            <div class="d-flex col-2 border border-secondary justify-content-center align-items-center">Pablo Espinoza</div>
-            <div class="d-flex col-2 border border-secondary justify-content-center align-items-center">30/10/2022</div>
-            <div class="d-flex col-2 border border-secondary rounded-end justify-content-center align-items-center bg-success">En Proceso</div>
-        </div>
+
+        <table id="backup_reg" class="table table-striped table-hover table-bordered" >
+            <thead>
+              <tr>
+                <th >Fecha Registro</th>
+                <th>Tipo de Backup</th>
+                <th>N# de Cinta</th>
+                <th>Usuario</th>
+                <th>Fecha Finalización</th>
+                <th >Estado</th>
+              </tr>
+            </thead>
+            <tbody class="table-group-divider">
+              <tr  *ngFor="let register of registers">
+                <td>{{ (register.start_date | amFromUnix) | amLocale: 'es' | amDateFormat: 'DD-MM-YYYY' }}</td>
+                <td>{{ register.backup.name }}</td>
+                <td>{{ register.tape.number }}</td>
+                <td>{{ register.user.name }}</td>
+                <td>{{ (register.end_date | amFromUnix) | amLocale: 'es' | amDateFormat: 'DD-MM-YYYY' }}</td>
+                <td>{{ register.status }}</td>
+              </tr>
+            </tbody>
+          </table>
 
     </div>
 
