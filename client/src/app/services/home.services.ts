@@ -21,25 +21,26 @@ export class HomeService{
         this.url = GLOBAL.url;
         this.identity = this._userService.getIdentity();
         this.token = this._userService.gettoken();
+
     }
 
-    gettoken(){
-        let token = localStorage.getItem('token');
+    // gettoken(){
+    //     let token = localStorage.getItem('token');
 
-        if(token != "undefined"){
-            this.token = token;
-        }else{
-            this.token = null;
-        }
+    //     if(token != "undefined"){
+    //         this.token = token;
+    //     }else{
+    //         this.token = null;
+    //     }
 
-        return this.token;
-    }
+    //     return this.token;
+    // }
 
-    getRegister(): Observable<any>{
+    getRegister(page = 1): Observable<any>{
         let headers = new HttpHeaders().set('Content-Type', 'application/json')
-                                        .set('Authorization', this.gettoken());
+                                        .set('Authorization', this.token());
 
-        return this._http.get(this.url + 'get-register', {headers: headers});
+        return this._http.get(this.url + 'get-register/' + page, {headers: headers});
 
     }
 

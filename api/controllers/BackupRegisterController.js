@@ -75,7 +75,7 @@ function saveBackupRegister(req, res){
 
 function getBackupRegisters(req, res){
 
-    var itemsPerPage = 3;
+    var itemsPerPage = 7;
     var page = 1;
 
     if(req.params.page){

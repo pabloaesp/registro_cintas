@@ -40,10 +40,9 @@ export class HomeComponent implements OnInit{
 
 
     getRegisters() {
-        this._homeService.getRegister().subscribe(
+        this._homeService.getRegister(this.page).subscribe(
           response => {
             if (response.registers) {
-              console.log(response);
               this.registers = response.registers;
     
             } else {
@@ -59,5 +58,17 @@ export class HomeComponent implements OnInit{
           }
         );
       }
+
+      
+    public noMore = false;
+    viewMore() {
+    this.page += 1;
+
+    if (this.page == this.pages) {
+      this.noMore = true;
+    }
+
+    this.getPublications(this.user, this.page, true);
+  }
 
 }

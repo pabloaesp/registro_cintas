@@ -5,21 +5,11 @@
         <div class="d-flex flex-row mb-2">
             <h3>Registro de Respaldos</h3>
         </div>
-<!-- 
-        <div id="backup_reg" class="d-flex flex-row rounded border border-success" *ngFor="let register of registers">
-            <div class="d-flex col-2 border border-secondary rounded-start justify-content-center align-items-center">{{ (register.start_date | amFromUnix) | amLocale: 'es' | amDateFormat: 'DD-MM-YYYY' }}</div>
-            <div class="d-flex col-2 border border-secondary justify-content-center align-items-center">{{ register.backup.name }}</div>
-            <div class="d-flex col-2 border border-secondary justify-content-center align-items-center">{{ register.tape.number }}</div>
-            <div class="d-flex col-2 border border-secondary justify-content-center align-items-center">{{ register.user.name }}</div>
-            <div class="d-flex col-2 border border-secondary justify-content-center align-items-center">{{ (register.end_date | amFromUnix) | amLocale: 'es' | amDateFormat: 'DD-MM-YYYY' }}</div>
-            <div class="d-flex col-2 border border-secondary rounded-end justify-content-center align-items-center bg-success">{{ register.status }}</div>
-        </div> -->
-
 
         <table id="backup_reg" class="table table-striped table-hover table-bordered" >
             <thead>
               <tr>
-                <th >Fecha Registro</th>
+                <th>Fecha Registro</th>
                 <th>Tipo de Backup</th>
                 <th>N# de Cinta</th>
                 <th>Usuario</th>
@@ -34,7 +24,10 @@
                 <td>{{ register.tape.number }}</td>
                 <td>{{ register.user.name }}</td>
                 <td>{{ (register.end_date | amFromUnix) | amLocale: 'es' | amDateFormat: 'DD-MM-YYYY' }}</td>
-                <td>{{ register.status }}</td>
+                <td *ngIf="register.status == false; else trueBlock">Finalizado</td>
+                <ng-template #trueBlock>
+                  <td>En proceso</td>
+                </ng-template>
               </tr>
             </tbody>
           </table>
