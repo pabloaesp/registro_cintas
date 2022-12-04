@@ -2,11 +2,18 @@
     
     <div id="backup_reg_cont" class="d-flex flex-column w-100 p-3">
 
-        <div class="d-flex flex-row mb-2">
-            <h3>Registro de Respaldos</h3>
+        <div class="d-flex flex-row mb-2 justify-content-between">
+
+            <div class="d-flex">
+                <h3>Registro de Respaldos</h3>
+            </div>
+            <div id="num_paginas" class="d-flex ms-1 col-3 justify-content-end align-items-center">
+                {{ page }} de {{ pages }} &nbsp; <span class="material-icons">description</span> 
+            </div>
+
         </div>
 
-        <table id="backup_reg" class="table table-striped table-hover table-bordered" >
+        <table id="backup_reg" class="table table-striped table-hover table-bordered w-100" >
             <thead>
               <tr>
                 <th>Fecha Registro</th>
@@ -14,7 +21,7 @@
                 <th>N# de Cinta</th>
                 <th>Usuario</th>
                 <th>Fecha Finalización</th>
-                <th >Estado</th>
+                <th id="th_estado">Estado</th>
               </tr>
             </thead>
             <tbody class="table-group-divider">
@@ -30,8 +37,27 @@
                 </ng-template>
               </tr>
             </tbody>
-          </table>
+        </table>
+
+        <div class="d-flex w-100 justify-content-center">
+            <div class="d-flex flex-row justify-content-center col-2">
+
+                <button type="button" class="d-flex btn btn-outline-secondary w-50 me-1 justify-content-center"
+                        (click)="viewLess()" *ngIf="noLess">
+                    <span class="material-icons">
+                        chevron_left
+                    </span>
+                </button>
+                
+                <button type="button" class="d-flex btn btn-outline-secondary w-50 justify-content-center"
+                        (click)="viewMore()" *ngIf="!noMore">
+                    <span class="material-icons">
+                        chevron_right
+                    </span>
+                </button>
+
+            </div>
+        </div>
 
     </div>
-
 </div>

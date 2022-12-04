@@ -28,47 +28,81 @@ export class HomeComponent implements OnInit{
         this.page = 1;
         this.total = '';
         this.pages = '';
-        this.itemsPerPage = 3;
+        // this.itemsPerPage = 3;
         this.status = 'null';
         this.registers;
     }
 
     ngOnInit(){
         console.log('home.component cargado');
-        this.getRegisters();
+        this.getRegisters(this.page);
     }
 
 
-    getRegisters() {
-        this._homeService.getRegister(this.page).subscribe(
-          response => {
-            if (response.registers) {
-              this.registers = response.registers;
-    
-            } else {
-              this.status = 'error';
+    getRegisters(page:any) {
+        this._homeService.getRegister(page).subscribe(
+            response => {
+                if (response.registers) {
+                    console.log(response.registers);
+                    this.total = response.total;
+                    this.pages = response.pages;
+                    this.registers = response.registers;
+                    // console.log(this.registers);
+
+                } else {
+                    this.status = 'error';
+                }
+            },
+            error => {
+                var errorMessage = <any>error;
+                console.log(errorMessage);
+
+                if (errorMessage != null) {
+                    this.status = 'error';
+                }
             }
-          },
-          error => {
-            var errorMessage = <any>error;
-            console.log(errorMessage);
-            if (errorMessage != null) {
-              this.status = 'error';
-            }
-          }
         );
-      }
-
-      
-    public noMore = false;
-    viewMore() {
-    this.page += 1;
-
-    if (this.page == this.pages) {
-      this.noMore = true;
     }
 
-    this.getPublications(this.user, this.page, true);
-  }
+    // Creando flags para los botones de pasar paginas
+    public noLess = false;
+    public noMore = false;
+        
+    viewLess() {
+        this.page -= 1;
+
+        if (this.page == 1) {
+            this.noLess = false;
+            this.noMore = false;
+        }
+
+        console.log('page ' + this.page);
+        console.log('pages ' + this.pages);
+        console.log('total ' + this.total);
+
+        this.getRegisters(this.page);
+    }
+
+    viewMore() {
+        this.page += 1;
+
+        if (this.page >= 2) {
+            this.noLess = true;
+        }
+
+        if (this.page == this.pages) {
+            this.noMore = true;
+        }
+
+        if (this.page == 1) {
+            this.noLess = false;
+        }
+
+        console.log('page ' + this.page);
+        console.log('pages ' + this.pages);
+        console.log('total ' + this.total);
+
+        this.getRegisters(this.page);
+    }
 
 }

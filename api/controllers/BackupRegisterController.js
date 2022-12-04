@@ -88,6 +88,7 @@ function getBackupRegisters(req, res){
         if(!registers) return res.status(404).send({message: 'No registros disponibles'});
 
         return res.status(200).send({
+            page,
             registers,
             total,
             pages: Math.ceil(total/itemsPerPage)

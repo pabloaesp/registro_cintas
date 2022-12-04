@@ -36,9 +36,9 @@ export class HomeService{
     //     return this.token;
     // }
 
-    getRegister(page = 1): Observable<any>{
+    getRegister(page:any): Observable<any>{
         let headers = new HttpHeaders().set('Content-Type', 'application/json')
-                                        .set('Authorization', this.token());
+                                        .set('Authorization', this.token);
 
         return this._http.get(this.url + 'get-register/' + page, {headers: headers});
 
