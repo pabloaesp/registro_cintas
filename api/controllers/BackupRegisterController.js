@@ -82,7 +82,7 @@ function getBackupRegisters(req, res){
         page = req.params.page;
     }
 
-    BackupRegister.find().sort('start_date').populate('user backup tape').paginate(page, itemsPerPage, (err, registers, total) => {
+    BackupRegister.find().sort({status:-1}).populate('user backup tape').paginate(page, itemsPerPage, (err, registers, total) => {
         if(err) res.status(500).send({message: 'Error en la peticion'});
 
         if(!registers) return res.status(404).send({message: 'No registros disponibles'});

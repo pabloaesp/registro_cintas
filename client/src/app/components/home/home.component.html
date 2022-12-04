@@ -1,11 +1,11 @@
-<div class="d-flex col-9 m-2 border rounded">
+<div class="d-flex col-9 m-3 border rounded">
     
     <div id="backup_reg_cont" class="d-flex flex-column w-100 p-3">
 
-        <div class="d-flex flex-row mb-2 justify-content-between">
+        <div class="d-flex flex-row mb-3 justify-content-between">
 
             <div class="d-flex">
-                <h3>Registro de Respaldos</h3>
+                <h4>Registro de Respaldos</h4>
             </div>
             <div id="num_paginas" class="d-flex ms-1 col-3 justify-content-end align-items-center">
                 {{ page }} de {{ pages }} &nbsp; <span class="material-icons">description</span> 
@@ -14,7 +14,7 @@
         </div>
 
         <table id="backup_reg" class="table table-striped table-hover table-bordered w-100" >
-            <thead>
+            <thead class="">
               <tr>
                 <th>Fecha Registro</th>
                 <th>Tipo de Backup</th>
@@ -24,8 +24,8 @@
                 <th id="th_estado">Estado</th>
               </tr>
             </thead>
-            <tbody class="table-group-divider">
-              <tr  *ngFor="let register of registers">
+            <tbody class="table-group-divider fs-6">
+              <tr *ngFor="let register of registers">
                 <td>{{ (register.start_date | amFromUnix) | amLocale: 'es' | amDateFormat: 'DD-MM-YYYY' }}</td>
                 <td>{{ register.backup.name }}</td>
                 <td>{{ register.tape.number }}</td>
@@ -33,7 +33,7 @@
                 <td>{{ (register.end_date | amFromUnix) | amLocale: 'es' | amDateFormat: 'DD-MM-YYYY' }}</td>
                 <td *ngIf="register.status == false; else trueBlock">Finalizado</td>
                 <ng-template #trueBlock>
-                  <td>En proceso</td>
+                  <td id="td_true">En proceso</td>
                 </ng-template>
               </tr>
             </tbody>
