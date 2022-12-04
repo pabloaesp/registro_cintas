@@ -2,7 +2,6 @@ import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { JsonPipe } from "@angular/common";
 import { User } from '../../models/user';
-import { BackupRegister } from '../../models/backup-register';
 import { UserService } from "src/app/services/user.services";
 import { HomeService } from "src/app/services/home.services";
 

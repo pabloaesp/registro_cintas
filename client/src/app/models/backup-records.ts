@@ -1,4 +1,4 @@
-export class BackupRegister {
+export class BackupRecords {
     constructor(
         public _id: string,
         public user: string,

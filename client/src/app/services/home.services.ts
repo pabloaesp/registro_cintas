@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs-compat/Observable';
 import { GLOBAL } from './global';
 import { User } from '../models/user';
-import { BackupRegister } from '../models/backup-register';
 import { UserService } from '../services/user.services';
 
 
