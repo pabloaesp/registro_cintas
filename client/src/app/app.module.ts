@@ -10,6 +10,7 @@ import { MomentModule } from 'angular2-moment';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
+import { RegisterComponent } from './components/register/register.component';
 import { UserService } from './services/user.services';
 import { HomeService } from './services/home.services';
 
@@ -17,7 +18,8 @@ import { HomeService } from './services/home.services';
   declarations: [
     AppComponent,
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
