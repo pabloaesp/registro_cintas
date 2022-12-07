@@ -7,7 +7,7 @@ var Backup = require('../models/backupModel');
 
 function getBackups(req, res){
 
-    var itemsPerPage = 3;
+    var itemsPerPage = 10;
     var page = 1;
 
     if(req.params.page){

@@ -13,6 +13,9 @@ import { HomeComponent } from './components/home/home.component';
 import { RegisterComponent } from './components/register/register.component';
 import { UserService } from './services/user.services';
 import { HomeService } from './services/home.services';
+import { BackupService } from './services/backup.services';
+import { TapeService } from './services/tape.services';
+
 
 @NgModule({
   declarations: [
@@ -31,7 +34,10 @@ import { HomeService } from './services/home.services';
   providers: [
     appRoutingProviders,
     UserService,
-    HomeService
+    HomeService,
+    BackupService,
+    TapeService,
+    
   ],
   bootstrap: [AppComponent]
 })

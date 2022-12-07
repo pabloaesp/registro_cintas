@@ -42,7 +42,6 @@ export class HomeComponent implements OnInit{
         this._homeService.getRegister(page).subscribe(
             response => {
                 if (response.registers) {
-                    console.log(response.registers);
                     this.total = response.total;
                     this.pages = response.pages;
                     this.registers = response.registers;
@@ -75,10 +74,6 @@ export class HomeComponent implements OnInit{
             this.noMore = false;
         }
 
-        console.log('page ' + this.page);
-        console.log('pages ' + this.pages);
-        console.log('total ' + this.total);
-
         this.getRegisters(this.page);
     }
 
@@ -96,10 +91,6 @@ export class HomeComponent implements OnInit{
         if (this.page == 1) {
             this.noLess = false;
         }
-
-        console.log('page ' + this.page);
-        console.log('pages ' + this.pages);
-        console.log('total ' + this.total);
 
         this.getRegisters(this.page);
     }

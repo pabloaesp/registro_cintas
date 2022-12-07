@@ -16,16 +16,17 @@
                 <div class="mb-3">
                     <label class="form-label">Tipo de backup</label>
                     <select class="form-select">
-                        <option selected>Selecciona un tipo de respaldo</option>
-                        <option value="1">Full Lunes</option>
-                        <option value="2">Sabado Full Vms</option>
-                        <option value="3">Correo</option>
+                        <option selected>Selecciona un tipo de respaldo...</option>
+                        <option value="{{ backup._id }}" *ngFor="let backup of backups">{{ backup.name }}</option>
                     </select>
                 </div>
 
                 <div class="mb-3">
-                    <label  class="form-label">N# de cinta</label>
-                    <input type="text" class="form-control">
+                    <label class="form-label">Cinta</label>
+                    <select class="form-select">
+                        <option selected>Selecciona una cinta...</option>
+                        <option value="{{ tape._id }}" *ngFor="let tape of tapes">{{ tape.number }}</option>
+                    </select>
                 </div>
 
                 <div class="mb-3">

@@ -61,6 +61,18 @@ function getTapes(req, res){
 }
 
 
+function getAvalibleTapes(req, res){
+
+    Tape.find({status: false}).sort('status').exec((err, avalibleTapes) => {
+        if(err) res.status(500).send({message: 'Error en la peticion'});
+
+        if(!avalibleTapes) return res.status(404).send({message: 'No hay cintas disponibles'});
+
+        return res.status(200).send({ avalibleTapes});
+    });
+}
+
+
 function getTape(req, res){
     var tapeId = req.params.id;
 
@@ -134,6 +146,7 @@ function deleteTape(req, res){
 module.exports = {
     tapeRegister,
     getTapes,
+    getAvalibleTapes,
     getTape,
     tapeUpdate,
     tapeStatusUpdate,
