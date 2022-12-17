@@ -10,8 +10,19 @@
     </div>
     
     <div class="d-flex col-6">
-        <div class="d-flex w-100 h-100 justify-content-center align-items-center">
-            Nuevo registro | Cintas | Respaldos | Tipos de backups
+        <div class="d-flex flex-row w-100 h-100 mx-5 justify-content-center align-items-center">
+            <div class="d-flex mx-3 justify-content-center">
+                <a class="link-home" [routerLink]="['/register']" [routerLinkActive]="['active']">Nuevo registro</a>
+            </div>
+            <div class="d-flex mx-3 justify-content-center">
+                <a class="link-home" [routerLink]="['/register-list']">Registros</a>
+            </div>
+            <div class="d-flex mx-3 justify-content-center">
+                <a class="link-home" [routerLink]="['/']">Cintas</a>
+            </div>
+            <div class="d-flex mx-3 justify-content-center">
+                <a class="link-home" [routerLink]="['/']">Tipos de backup</a>
+            </div>
         </div>
     </div>
 

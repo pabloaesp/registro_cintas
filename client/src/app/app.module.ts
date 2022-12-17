@@ -15,6 +15,7 @@ import { UserService } from './services/user.services';
 import { HomeService } from './services/home.services';
 import { BackupService } from './services/backup.services';
 import { TapeService } from './services/tape.services';
+import { RegisterListComponent } from './components/register-list/register-list.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { TapeService } from './services/tape.services';
     AppComponent,
     LoginComponent,
     HomeComponent,
-    RegisterComponent
+    RegisterComponent,
+    RegisterListComponent
   ],
   imports: [
     BrowserModule,

@@ -78,11 +78,18 @@ function getBackupRegisters(req, res){
     var itemsPerPage = 7;
     var page = 1;
 
-    if(req.params.page){
+    if (req.params.page && req.params.ipp) {
+        page = req.params.page;    
+        itemsPerPage = req.params.ipp;
+
+    } else if (req.params.page){
         page = req.params.page;
+
+    } else {
+        itemsPerPage = req.params.page
     }
 
-    BackupRegister.find().sort({status:-1}).populate('user backup tape').paginate(page, itemsPerPage, (err, registers, total) => {
+    BackupRegister.find().sort({status:-1, start_date: -1}).populate('user backup tape').paginate(page, itemsPerPage, (err, registers, total) => {
         if(err) res.status(500).send({message: 'Error en la peticion'});
 
         if(!registers) return res.status(404).send({message: 'No registros disponibles'});

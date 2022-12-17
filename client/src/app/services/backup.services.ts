@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs-compat/Observable';
 import { GLOBAL } from './global';
-// import { Backup } from '../models/backup';
+import { BackupRecords } from '../models/backup-records';
 import { UserService } from '../services/user.services';
 
 
@@ -27,6 +27,15 @@ export class BackupService{
                                         .set('Authorization', this.token);
 
         return this._http.get(this.url + 'backups/', {headers: headers});
+
+    }
+
+    registerBackup(backup: BackupRecords): Observable<any>{
+        let params = JSON.stringify(backup);
+        let headers = new HttpHeaders().set('Content-Type', 'application/json')
+                                        .set('Authorization', this.token);
+
+        return this._http.post(this.url + 'backup-register', params, {headers: headers});
 
     }
 

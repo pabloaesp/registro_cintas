@@ -43,6 +43,14 @@ export class HomeService{
 
     }
 
+    getAllRegister(page:any, ipp:any): Observable<any>{
+        let headers = new HttpHeaders().set('Content-Type', 'application/json')
+                                        .set('Authorization', this.token);
+
+        return this._http.get(this.url + 'get-register/' + page + '/' + ipp, {headers: headers});
+
+    }
+
     
 
 }

@@ -1,44 +1,42 @@
 <div class="d-flex m-3">
-    <div class="d-flex flex-column border col-6 p-3 rounded">
+    <div class="d-flex flex-column border col-6 p-3 rounded">   
 
         <div class="d-flex mb-3">
             <h3>Registro de respaldos</h3>
         </div>
 
-        <div id="form-registro" class="d-flex flex-column ">
-            <form>
+        <div id="form-registro" class="d-flex flex-column">
+            <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)">
 
                 <div class="mb-3">
                     <label class="form-label">Usuario</label>
-                    <input type="text" class="form-control" value="{{ identity.nick }}" readonly placeholder="usuario">
+                    <input type="text" class="form-control" readonly [value]="identity._id"
+                            name="user" #user="ngModel" [(ngModel)]="this.nombreCompleto">
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Tipo de backup</label>
-                    <select class="form-select">
-                        <option selected>Selecciona un tipo de respaldo...</option>
-                        <option value="{{ backup._id }}" *ngFor="let backup of backups">{{ backup.name }}</option>
+                    <select class="form-select" name="backup" #backup="ngModel" [(ngModel)]="bkRecord.backup">
+                        <option *ngFor="let backup of backups" [ngValue]="backup._id">{{ backup.name }}</option>
                     </select>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Cinta</label>
-                    <select class="form-select">
-                        <option selected>Selecciona una cinta...</option>
-                        <option value="{{ tape._id }}" *ngFor="let tape of tapes">{{ tape.number }}</option>
+                    <select class="form-select" name="tape" #tape="ngModel" [(ngModel)]="bkRecord.tape">
+                        <option *ngFor="let tape of tapes" value="{{ tape._id }}">{{ tape.number }}</option>
                     </select>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Notas</label>
-                    <textarea class="form-control" style="height: 100px"></textarea>
+                    <textarea class="form-control" style="height: 100px"
+                                name="note" #note="ngModel" [(ngModel)]="bkRecord.note"></textarea>
                 </div>
 
                 <div class="d-flex justify-content-end">
                     <button type="submit" class="btn btn-success col-2 my-2">Registrar</button>
                 </div>
-
-
 
             </form>
         </div>
