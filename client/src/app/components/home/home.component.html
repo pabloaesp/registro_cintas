@@ -1,65 +1,76 @@
-<div class="d-flex col-9 m-3 border rounded">
-    
-    <div id="backup_reg_cont" class="d-flex flex-column w-100 p-3">
+<div class="d-flex flex-row p-3"> <!-- Div Principal -->
 
-        <div class="d-flex flex-row mb-3 justify-content-between">
+    <div id="div_respaldos" class="d-flex border me-3 rounded">
+        <div id="backup_reg_cont" class="d-flex flex-column w-100 p-3">
 
-            <div class="d-flex">
-                <h3>Respaldos</h3>
+            <div class="d-flex flex-row mb-3 justify-content-between">
+                <div class="d-flex">
+                    <h3>Respaldos</h3>
+                </div>
+                <div id="num_paginas" class="d-flex ms-1 col-3 justify-content-end align-items-center">
+                    {{ page }} de {{ pages }} &nbsp; <span class="material-icons">description</span> 
+                </div>
             </div>
-            <div id="num_paginas" class="d-flex ms-1 col-3 justify-content-end align-items-center">
-                {{ page }} de {{ pages }} &nbsp; <span class="material-icons">description</span> 
+
+            <table id="backup_table" class="table table-striped table-hover table-bordered w-100" >
+                <thead class="">
+                <tr>
+                    <td id="tfecha">Fecha Inicio</td>
+                    <td id="tbackup">Tipo Backup</td>
+                    <td id="tcinta">N# Cinta</td>
+                    <td id="tuser">Usuario</td>
+                    <td id="tfecha">Fecha Fin</td>
+                    <td id="">Notas</td>
+                    <td id="testado">Estado</td>
+                </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                <tr *ngFor="let register of registers">
+                    <td>{{ (register.start_date | amFromUnix) | amLocale: 'es' | amDateFormat: 'DD-MM-YYYY' }}</td>
+                    <td>{{ register.backup.name}}</td>
+                    <td>{{ register.tape.number }}</td>
+                    <td>{{ register.user.name + ' ' + register.user.surname }}</td>
+                    <td>{{ (register.end_date | amFromUnix) | amLocale: 'es' | amDateFormat: 'DD-MM-YYYY' }}</td>
+                    <td id="tnota">{{ register.note }}</td>
+                    <td *ngIf="register.status == false; else trueBlock">Finalizado</td>
+                    <ng-template #trueBlock>
+                    <td id="td_true">En proceso</td>
+                    </ng-template>
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="d-flex w-100 justify-content-center">
+                <div class="d-flex flex-row justify-content-center col-2">
+
+                    <button type="button" class="d-flex btn btn-outline-secondary w-50 me-1 justify-content-center"
+                            (click)="viewLess()" *ngIf="noLess">
+                        <span class="material-icons">
+                            chevron_left
+                        </span>
+                    </button>
+                    
+                    <button type="button" class="d-flex btn btn-outline-secondary w-50 justify-content-center"
+                            (click)="viewMore()" *ngIf="!noMore">
+                        <span class="material-icons">
+                            chevron_right
+                        </span>
+                    </button>
+
+                </div>
             </div>
 
         </div>
-
-        <table id="backup_table" class="table table-striped table-hover table-bordered w-100" >
-            <thead class="">
-              <tr>
-                <td id="tfecha">Fecha Inicio</td>
-                <td id="tbackup">Tipo Backup</td>
-                <td id="tcinta">N# Cinta</td>
-                <td id="tuser">Usuario</td>
-                <td id="tfecha">Fecha Fin</td>
-                <td id="">Notas</td>
-                <td id="testado">Estado</td>
-              </tr>
-            </thead>
-            <tbody class="table-group-divider">
-              <tr *ngFor="let register of registers">
-                <td>{{ (register.start_date | amFromUnix) | amLocale: 'es' | amDateFormat: 'DD-MM-YYYY' }}</td>
-                <td>{{ register.backup.name}}</td>
-                <td>{{ register.tape.number }}</td>
-                <td>{{ register.user.name + ' ' + register.user.surname }}</td>
-                <td>{{ (register.end_date | amFromUnix) | amLocale: 'es' | amDateFormat: 'DD-MM-YYYY' }}</td>
-                <td id="tnota">{{ register.note }}</td>
-                <td *ngIf="register.status == false; else trueBlock">Finalizado</td>
-                <ng-template #trueBlock>
-                  <td id="td_true">En proceso</td>
-                </ng-template>
-              </tr>
-            </tbody>
-        </table>
-
-        <div class="d-flex w-100 justify-content-center">
-            <div class="d-flex flex-row justify-content-center col-2">
-
-                <button type="button" class="d-flex btn btn-outline-secondary w-50 me-1 justify-content-center"
-                        (click)="viewLess()" *ngIf="noLess">
-                    <span class="material-icons">
-                        chevron_left
-                    </span>
-                </button>
-                
-                <button type="button" class="d-flex btn btn-outline-secondary w-50 justify-content-center"
-                        (click)="viewMore()" *ngIf="!noMore">
-                    <span class="material-icons">
-                        chevron_right
-                    </span>
-                </button>
-
-            </div>
-        </div>
-
     </div>
+
+    <div id="div_cintas" class="d-flex flex-column p-3 border rounded">
+        <div class="d-flex mb-3">
+            <h3>Cintas</h3>
+        </div>
+
+        <div class="d-flex flex-column">
+            
+        </div>
+    </div>
+
 </div>

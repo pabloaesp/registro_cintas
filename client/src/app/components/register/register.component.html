@@ -5,6 +5,11 @@
             <h3>Registro de respaldos</h3>
         </div>
 
+        <!-- Error -->
+        <div id="alert-register" class="alert alert-danger m-0" *ngIf="status == 'error'">
+            <p class="m-0">{{ errorText }}</p>
+        </div>
+
         <div id="form-registro" class="d-flex flex-column">
             <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)">
 
@@ -16,26 +21,32 @@
 
                 <div class="mb-3">
                     <label class="form-label">Tipo de backup</label>
-                    <select class="form-select" name="backup" #backup="ngModel" [(ngModel)]="bkRecord.backup">
+                    <select class="form-select" name="backup" #backup="ngModel" [(ngModel)]="bkRecord.backup" required>
                         <option *ngFor="let backup of backups" [ngValue]="backup._id">{{ backup.name }}</option>
                     </select>
+                    <span id="span_error" *ngIf="!backup.valid && backup.touched">
+                        El campo "tipo de backup" es obligatorio
+                    </span>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Cinta</label>
-                    <select class="form-select" name="tape" #tape="ngModel" [(ngModel)]="bkRecord.tape">
+                    <select class="form-select" name="tape" #tape="ngModel" [(ngModel)]="bkRecord.tape" required>
                         <option *ngFor="let tape of tapes" value="{{ tape._id }}">{{ tape.number }}</option>
                     </select>
+                    <span id="span_error" *ngIf="!tape.valid && tape.touched">
+                        El campo "Cinta" es obligatorio
+                    </span>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Notas</label>
-                    <textarea class="form-control" style="height: 100px"
+                    <textarea class="form-control" style="height: 100px" placeholder="Opcional..."
                                 name="note" #note="ngModel" [(ngModel)]="bkRecord.note"></textarea>
                 </div>
 
                 <div class="d-flex justify-content-end">
-                    <button type="submit" class="btn btn-success col-2 my-2">Registrar</button>
+                    <input type="submit" class="btn btn-success col-2 my-2" [disabled]="!registerForm.form.valid" value="Registrar">
                 </div>
 
             </form>

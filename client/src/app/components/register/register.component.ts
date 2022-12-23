@@ -22,6 +22,7 @@ export class RegisterComponent implements OnInit{
     public status: any;
     public bkRecord: BackupRecords;
     public nombreCompleto: any;
+    public errorText: any;
 
     constructor(
         private _route: ActivatedRoute,
@@ -48,19 +49,24 @@ export class RegisterComponent implements OnInit{
         this._backupService.registerBackup(this.bkRecord).subscribe(
             response => {
                 if(response){
-                    console.log(response);
-        
+                    // console.log(response);
                     this.status = 'success';
-                    form.reset();
                     this.nombreCompleto;
                     this._router.navigate(['/home']);
+                    form.reset();
                     
                 }else{
                     this.status = 'error';
                 }
             },
             error => {
-                console.log(<any>error);
+                var errorMessage = <any>error;
+                console.log(errorMessage);
+
+                if(errorMessage != null){
+                    this.status = 'error';
+                    this.errorText = errorMessage.error.message;
+                }
             }
         );
     }

@@ -40,7 +40,6 @@ export class HomeService{
                                         .set('Authorization', this.token);
 
         return this._http.get(this.url + 'get-register/' + page, {headers: headers});
-
     }
 
     getAllRegister(page:any, ipp:any): Observable<any>{
@@ -48,9 +47,14 @@ export class HomeService{
                                         .set('Authorization', this.token);
 
         return this._http.get(this.url + 'get-register/' + page + '/' + ipp, {headers: headers});
-
     }
 
-    
+    getAvalibleTapes(): Observable<any>{
+        let headers = new HttpHeaders().set('Content-Type', 'application/json')
+                                        .set('Authorization', this.token);
+
+        return this._http.get(this.url + 'avalible-tapes/', {headers: headers});
+    }
+
 
 }

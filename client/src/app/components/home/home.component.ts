@@ -17,6 +17,8 @@ export class HomeComponent implements OnInit{
     public itemsPerPage:any;
     public status:string;
     public registers: any;
+    public avalibleTapes: any;
+    public errorText: any;
 
     constructor(
         private _route: ActivatedRoute,
@@ -35,6 +37,7 @@ export class HomeComponent implements OnInit{
     ngOnInit(){
         console.log('home.component cargado');
         this.getRegisters(this.page);
+        this.getTapes();
     }
 
 
@@ -46,6 +49,29 @@ export class HomeComponent implements OnInit{
                     this.pages = response.pages;
                     this.registers = response.registers;
                     // console.log(this.registers);
+
+                } else {
+                    this.status = 'error';
+                }
+            },
+            error => {
+                var errorMessage = <any>error;
+                console.log(errorMessage);
+
+                if(errorMessage != null){
+                    this.status = 'error';
+                    this.errorText = errorMessage.error.message;
+                }
+            }
+        );
+    }
+
+    getTapes(){
+        this._homeService.getAvalibleTapes().subscribe(
+            response => {
+                if (response.avalibleTapes) {
+                    this.avalibleTapes = response.avalibleTapes;
+                    console.log(this.avalibleTapes);
 
                 } else {
                     this.status = 'error';
