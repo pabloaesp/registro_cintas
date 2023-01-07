@@ -10,35 +10,64 @@ tbody
         text-align: center
         // width: 15%
 
+    
+#num_paginas
+    color: #616161
+
 
 #tfecha
     width: 13%
 #tbackup
     width: 14%
 #tcinta
-    width: 11%
+    width: 10%
 #tuser
     width: 15%
 #tnota
+    width: 25%
+#tnota_text
+    width: 25%
     font-size: 14px
 #testado
-    width: 10%
+    width: 15%
 
 
-#num_paginas
-    color: #616161
 
+// Cabecera tabla registros
+#table_head
+    td
+        border-bottom: 1px #048100 solid
+
+// TR del registro que esta en proceso 
 tr:has(#td_true)
-    height: 60px
+    height: 70px !important
     background-color: #c8eeb7
-    border: 2px #048100 solid
+    border: 1px #048100 solid
     font-size: 18px
+    &:hover
+        background-color: #a6d68f
     td
         color: #0b2408
-        border: 2px #048100 solid
+        border: 1px #048100 solid
         font-weight: bold
         vertical-align: middle
-    
+
+// Botones/tr de la lista que estan finalizados
+#btn_register
+    width: 100%
+    border: none
+    background-color: #fff
+    padding: 0px
+    &:hover
+        background-color: #d0ebc7
+    table
+        width: 100%
+        td
+            height: 35px
+            border-bottom: 1px #048100 solid
+            border-right: 1px #048100 solid
+            border-left: 1px #048100 solid
+
 
 #div_respaldos
     width: 75%
@@ -49,19 +78,30 @@ tr:has(#td_true)
 
 #tabla_tapes
     height: 60px
+    border: 2px solid #048100
     td
         border: 1px solid #cfcfcf
         text-align: center
 
-#td_numero_tape
-    font-weight: bold
-    width: 30%
-    font-size: 18px
+    #td_numero_tape
+        font-weight: bold
+        width: 30%
+        font-size: 18px
 
-#td_lugar_tape
-    width: 50%    
+    #td_lugar_tape
+        width: 50%    
 
-#td_estado_tape
-    width: 20%  
+    #td_estado_tape
+        width: 20%
+        background-color: #048100
+        color: #fff
+        vertical-align: middle
+
+
+
+.class_selected
+    border: 2px solid #048100 !important
+    
+
 
 
